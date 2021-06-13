@@ -1,27 +1,41 @@
+
 package edu.cnm.deepdive;
 
-import java.util.Scanner;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Converter {
+import org.junit.jupiter.api.Test;
 
-  public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Please type a Celsius temperature (blank to quit):");
-    String userInput = scanner.nextLine();
-    while (!userInput.isEmpty()) {
-      try {
-        System.out.printf(
-            "Fahrenheit temperature: %,.2f degrees%nPlease type a Celsius temperature (blank to quit):"
-            convertC2F(Double.parseDouble(userInput)));
-      } catch (NumberFormatException e) {
-         System.out.printf("Unable to parse \%s\". Please try again: ", userInput);
-      }
-      userInput = scanner.nextLine();
+class ConverterTest {
+
+  static double[] celsiusValues = {-40, 0, 100, 37.1};
+  static double[] expectedFahrenheitValues = {-40, 32, 212, 98.78};
+  static final double TOLERANCE = 0.0001;
+  static final double[][] temperaturePairs = {
+      {-40, -40},
+      {0, 32},
+      {100, 212},
+      {37.1, 98.78}
+  };
+
+  @Test
+  void convertC2F() {
+    for (double[] testCase : temperaturePairs) {
+      double celsius = testCase[0];
+      double expectedFahrenheit = testCase[1];
+      double actualFahrenheit = Converter.convertC2F(celsius);
+      assertEquals(expectedFahrenheit, actualFahrenheit, TOLERANCE);
     }
   }
 
-  public static double convertC2F(double celsius) {
-    return celsius * 9 / 5 + 32;
+  @Test
+  void convertF2C() {
+    for (double[] testCase : temperaturePairs) {
+      double fahrenheit = testCase[1];
+      double expectedCelsius = testCase[0];
+      double actualCelsius = Converter.convertF2C(fahrenheit);
+      assertEquals(expectedCelsius, actualCelsius, TOLERANCE);
+    }
+
   }
 
 }
